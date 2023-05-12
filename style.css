@@ -1,4 +1,14 @@
-.grid-wrapper {
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    height: 100vh;
+    margin: 0;
+  }
+  
+  
+  .grid-wrapper {
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -12,8 +22,8 @@
     flex-wrap: wrap;
     height: 100%;
     justify-content: center;
-    height: 600px;
-    width: 600px;
+    height: 40vmin;
+    width: 40vmin;
   }
   
   .grid div {
@@ -21,4 +31,11 @@
     flex-grow: 1;
     height: 10%;
     width: 10%;
+  }
+  
+  .grid div.cat {
+    background-image: url('../assets/cat.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
   }
