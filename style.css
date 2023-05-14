@@ -8,6 +8,9 @@
   
   
   body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     height: 100vh;
     margin: 0;
     background-image: url("https://wallpapercave.com/wp/wp2478617.jpg");
@@ -31,7 +34,7 @@
     display: flex;
     justify-content: center;
     font-size: 4vmin;
-    color: #1f1882;
+    color: black;
     margin-top: -2vmin;
   }
 
@@ -56,12 +59,12 @@ body.game-running #start-screen {
 }
   
   .grid-wrapper {
-    height: 100vh;
+    /* height: 100vh; */
     display: flex;
     justify-content: center;
     align-items: center;
     grid-area: item-1;
-    margin-top: -25vmin;
+    /* margin-top: -25vmin; */
     position: relative;
     /* Added this to contain the pseudo-element */
     overflow: hidden;
@@ -129,7 +132,7 @@ body.game-running #start-screen {
   }
 
   .grid div.food {
-    background-color: black;
+    background-color: red;
   }
   
   
@@ -175,31 +178,56 @@ body.game-running #start-screen {
     justify-content: start;
   margin-left: -1vmin;
   }
+
   
   #score,
   #high-score {
-    font-size: 4vmin;
+    font-size: 4vmin; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-area: item-1;
+    /* margin-top: -25vmin; */
+    /* position: relative; */
+    font-family: 'Cabin Sketch', cursive;
+    color: #bfd;
+
+    /* Added this to contain the pseudo-element */
+    /* Added this to make sure the pseudo-element doesn't overflow */
   }
   
   #score {
+  margin-left: 8vmin;
+   margin-top: 0vmin; 
+   margin-bottom: -1vmin;
+   padding-bottom: 0vmin;
+  }
+
+  #score-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 60vmin;  /* Same as the grid width */
+    margin-top: 7vmin;
+    margin-bottom: 2vmin;/* Space between the score and the grid */
+}
+    /*
     color: #bfd;
     font-family: 'Cabin Sketch', cursive;
     position: absolute;
-    top: 40%;
-    left: 20%;
+    top: 38%;
+    left: 26%;
     transform: translate(-50%, -100%);
-    font-size: 4vmin;
+  
   }
+  */
   
   #high-score {
-    color: #bfd;
-    font-family: 'Cabin Sketch', cursive;
-    position: absolute;
-    top: 40%;
-    left: 70%;
-    transform: translate(-50%, -100%);
-    font-size: 4vmin;
-  }
+  margin-left: 20vmin;
+   margin-bottom: -1vmin;
+   padding-bottom: 0vmin;
+   margin-right: 3vmin;
+  
+  } 
   
   #gameover-score,
   #gameover-high-score,

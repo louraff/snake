@@ -1,5 +1,4 @@
-let delay = 400;
-let intervalId;
+
 
 window.addEventListener('DOMContentLoaded', init)
 
@@ -10,15 +9,26 @@ function init() {
   const cellCount = width * height
   const cells = []
 
+  const scoreElement = document.getElementById('score');
+  const highScoreElement = document.getElementById('high-score');
+  
+
+  const hiss = new Audio('sounds/hiss.mp3');
+  const takeoff = new Audio('sounds/takeoff.mp3');
+  const background = new Audio('sounds/background.mp3');
+  const announcement = new Audio('sounds/announcement.mp3');
+
   const worldRecord = '99,999'
   let highScore = localStorage.getItem('highScore') || 0
 
+  let delay = 400;
+  let intervalId;
   let score = 0000
 
-
+ 
   let direction = { x: 1, y: 0 }
   let snake = [
-    { x: Math.floor(width / 2), y: Math.floor(height / 2 + 1) }, // Snake starts at the center of the grid
+    { x: Math.floor(width / 2), y: Math.floor(height / 2) + 1 }, 
     { x: Math.floor(width / 2), y: Math.floor(height / 2) },
     { x: Math.floor(width / 2), y: Math.floor(height / 2) - 1 }
   ]
@@ -26,11 +36,15 @@ function init() {
   document.addEventListener("keydown", handleUserInput)
   document.getElementById('restart-button').addEventListener('click', restartGame);
   window.addEventListener('load', () => {
+    takeoff.play(); 
+    takeoff.volume = 0.5
     const startScreen = document.getElementById('start-screen');
     startScreen.style.display = 'flex';
 
+
     window.addEventListener('keyup', function startGame(e) {
         startScreen.style.display = 'none';
+        announcement.play();
 
         let containers = document.querySelectorAll('.container')
         // Show the game containers
@@ -40,6 +54,8 @@ function init() {
         document.body.classList.add('game-running');
         window.removeEventListener('keyup', startGame);
         createGrid();
+        background.play(); 
+        background.loop = true;
     });
 });
 
@@ -54,9 +70,13 @@ function init() {
       grid.appendChild(cell)
       cells.push(cell)
     }
+  
+    scoreElement.textContent = score;
+    highScoreElement.textContent = 'High Score: ' + highScore;
     drawSnake()
-    intervalId = setInterval(moveSnake, delay) // Game loop, moving the snake every 200ms
+    intervalId = setInterval(moveSnake, delay) 
     drawFood()
+    resetHighScore()
   }
 
   function clearSnake() {
@@ -100,22 +120,52 @@ function init() {
       // Remove the food
       cells[newHead.y * width + newHead.x].classList.remove('food');
       drawFood()
+      announcement.play() 
 
       updateScore()
   
       if (delay > 20) {  // Only speed up if the delay is over the minimum
-        delay -= 30;
-        console.log("New delay: " + delay);  // Log the new delay
+        delay *= 0.95;
+        console.log("New delay: " + delay); 
         clearInterval(intervalId);
         intervalId = setInterval(moveSnake, delay);
       }
     } else {
-      // Only remove the tail segment if the snake didn't eat food
+      
       snake.pop()
     }
   
     drawSnake()
   }
+
+  function gameOver() {
+    background.pause(); 
+    hiss.play(); 
+    hiss.volume = 0.4;
+    console.log('game over function called');
+    clearInterval(intervalId);
+
+   
+  grid.style.display = 'none';
+
+    scoreElement.style.display = 'none';
+    highScoreElement.style.display = 'none';
+
+    scoreElement.textContent = score;
+    highScoreElement.textContent = 'High Score: ' + highScore;
+
+     // Show the game over screen
+  const gameOverScreen = document.getElementById('gameover-screen');
+  gameOverScreen.style.display = 'block';
+  console.log('gameOverScreen display is now ' + gameOverScreen.style.display);
+
+  // Update the scores on the game over screen
+  document.getElementById('gameover-score').textContent = 'Score: ' + score;
+  document.getElementById('gameover-high-score').textContent = 'High Score: ' + highScore;
+
+  document.getElementById('gameover-world-record').textContent = 'World Record: ' + worldRecord;
+  }
+
   
 function restartGame() {
     console.log('restartGame() has been called');
@@ -138,20 +188,21 @@ function restartGame() {
   ];
 
   delay = 400;
-  clearInterval(intervalId);
-  intervalId = setInterval(moveSnake, delay);
+
+  scoreElement.style.display = 'flex';
+  highScoreElement.style.display = 'flex';
 
   // Redraw the grid and start the game again
   clearGrid()
   createGrid();
+  background.play()
+  background.loop = true;
 }
 
   
-  
   function randomFood() {
     let index = Math.floor(Math.random() * cells.length);
-  
-    // While the randomly selected cell is part of the snake, choose a new random cell
+
     while (cells[index].classList.contains('snake')) {
       index = Math.floor(Math.random() * cells.length);
     }
@@ -160,87 +211,34 @@ function restartGame() {
 }
 
 function drawFood() {
-    const foodIndex = randomFood();  // Get a random index for the food
-    cells[foodIndex].classList.add('food');  // Add the food class to the cell
+    const foodIndex = randomFood();  
+    cells[foodIndex].classList.add('food'); 
 }
 
 function checkSelfCollision(head) {
     for (let i = 1; i < snake.length; i++) {
       if (head.x === snake[i].x && head.y === snake[i].y) {
-        return true; // Collision with self detected
+        return true; 
       }
     }
-    return false; // No collision with self
+    return false; 
   }
 
-  function gameOver() {
-    console.log('game over function called');
-    clearInterval(intervalId);
-
-    const grid = document.querySelector('.grid')
-  grid.style.display = 'none';
-
-    const scoreElement = document.getElementById('score');
-    const highScoreElement = document.getElementById('high-score');
-
-    scoreElement.textContent = score;
-    highScoreElement.textContent = 'High Score: ' + highScore;
-
-     // Show the game over screen
-  const gameOverScreen = document.getElementById('gameover-screen');
-  gameOverScreen.style.display = 'block';
-  console.log('gameOverScreen display is now ' + gameOverScreen.style.display);
-
-  // Update the scores on the game over screen
-  document.getElementById('gameover-score').textContent = 'Score: ' + score;
-  document.getElementById('gameover-high-score').textContent = 'High Score: ' + highScore;
-
-  document.getElementById('gameover-world-record').textContent = 'World Record: ' + worldRecord;
-  }
-
+  
   function updateScore() {
-    // Increase the score
+    
     score++;
   
-    // Update the high score if necessary
     if (score > highScore) {
       highScore = score;
       localStorage.setItem('highScore', highScore);
     }
-  
-    // Update the score display
-    const scoreElement = document.getElementById('score');
-    const highScoreElement = document.getElementById('high-score');
-  
+    
     scoreElement.textContent = score;
     highScoreElement.textContent = 'High Score: ' + highScore;
+  
   }
-  
-  function displayHighScores(highScores) {
-    // Get the high scores div
-    const highScoresDiv = document.getElementById('high-scores');
-  
-    // Clear out the current contents
-    highScoresDiv.innerHTML = '';
-  
-    // Create a new list
-    const list = document.createElement('ul');
-  
-    // Add a title to the list
-    const title = document.createElement('li');
-    title.textContent = 'High Scores';
-    list.appendChild(title);
-  
-    // Add each high score to the list
-    for(let i = 0; i < highScores.length; i++) {
-      const listItem = document.createElement('li');
-      listItem.textContent = 'Score ' + (i + 1) + ': ' + highScores[i];
-      list.appendChild(listItem);
-    }
-  
-    // Add the list to the high scores div
-    highScoresDiv.appendChild(list);
-  }
+
 
   function handleUserInput(event) {
     const key = event.keyCode
@@ -250,7 +248,7 @@ function checkSelfCollision(head) {
     const right = 39
   
     let newDirection = direction
-  
+
     if (key === left) {
       newDirection = { x: -1, y: 0 }
     } else if (key === right) {
@@ -263,7 +261,6 @@ function checkSelfCollision(head) {
       return
     }
   
-    // Check if the new direction is the opposite of the current direction
     if (newDirection.x + direction.x !== 0 || newDirection.y + direction.y !== 0) {
       direction = newDirection
     }
@@ -275,6 +272,12 @@ function checkSelfCollision(head) {
       cell.parentNode.removeChild(cell);
     }
     cells.length = 0;
+  }
+
+  function resetHighScore() {
+    highScore = 0;
+    localStorage.setItem('highScore', highScore);
+    highScoreElement.textContent = 'High Score: ' + highScore;
   }
   
 }
