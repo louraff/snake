@@ -38,7 +38,7 @@ function init() {
             container.classList.remove('hide');
         });
         document.body.classList.add('game-running');
-        window.removeEventListener('keydown', startGame);
+        window.removeEventListener('keyup', startGame);
         createGrid();
     });
 });
@@ -81,8 +81,7 @@ function init() {
       x: snake[0].x + direction.x,
       y: snake[0].y + direction.y
     }
-  
-    // Check if the snake is out of bounds or collides with itself
+
     if (
       newHead.x < 0 || 
       newHead.y < 0 || 
@@ -93,7 +92,7 @@ function init() {
       return gameOver()
     }
   
-    // Always add the new head segment to the snake
+
     snake.unshift(newHead)
   
     // Check if the next cell contains food
@@ -101,8 +100,7 @@ function init() {
       // Remove the food
       cells[newHead.y * width + newHead.x].classList.remove('food');
       drawFood()
-  
-      // Call the updateScore function
+
       updateScore()
   
       if (delay > 20) {  // Only speed up if the delay is over the minimum
@@ -138,6 +136,10 @@ function restartGame() {
     { x: Math.floor(width / 2), y: Math.floor(height / 2) },
     { x: Math.floor(width / 2), y: Math.floor(height / 2) - 1 }
   ];
+
+  delay = 400;
+  clearInterval(intervalId);
+  intervalId = setInterval(moveSnake, delay);
 
   // Redraw the grid and start the game again
   clearGrid()
