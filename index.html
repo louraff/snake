@@ -7,10 +7,43 @@
     <link rel="stylesheet" href="style.css" />
     <script defer src="snake.js" charset="utf-8"></script>
     <title>SNAKE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bangers&family=Cabin+Sketch&family=Frijole&display=swap"
+      rel="stylesheet"
+    />
   </head>
+
   <body>
-    <main class="grid-wrapper">
-      <section class="grid"></section>
-    </main>
+    <div class="container">
+      <h1>Snakes on a Plane</h1>
+      <h2>WHEN SERPENTS RISE, HUMANS FALL.</h2>
+
+      <div id="start-screen">press any key to start</div>
+
+      <div class="container hide">
+        <div id="high-scores-wrapper">
+          <div id="high-score">High Score: 0</div>
+        </div>
+
+        <div id="score-wrapper">
+          <div id="score">Score: 0</div>
+        </div>
+        <main class="grid-wrapper">
+          <section class="grid"></section>
+        </main>
+        <div id="gameover-screen" style="display: none">
+          <!-- style="display: none" -->
+          <h1 class="gameover">Game Over!</h1>
+          <div class="leaderboard">
+            <h2 id="gameover-score"></h2>
+            <h2 id="gameover-high-score"></h2>
+            <h2 id="gameover-world-record"></h2>
+          </div>
+          <button id="restart-button">Try Again</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

@@ -1,41 +1,240 @@
 * {
     box-sizing: border-box;
   }
+
+  .hide {
+    display: none;
+  }
+  
   
   body {
     height: 100vh;
     margin: 0;
+    background-image: url("https://wallpapercave.com/wp/wp2478617.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
   }
   
+  h1 {
+    font-family: 'Bangers', cursive;
+    display: flex;
+    justify-content: center;
+    font-size: 10vmin;
+    color: #bfd;
+    margin-top: 10vmin;
+    margin-bottom: 4vmin;
+  }
+  
+  h2 {
+    font-family: 'Cabin Sketch', cursive;
+    display: flex;
+    justify-content: center;
+    font-size: 4vmin;
+    color: #1f1882;
+    margin-top: -2vmin;
+  }
+
+  #start-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    color: red;
+    font-family: 'Cabin Sketch', cursive;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 5vmin;
+    display: none;
+}
+
+body.game-running #start-screen {
+    display: none;
+}
   
   .grid-wrapper {
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    grid-area: item-1;
+    margin-top: -25vmin;
+    position: relative;
+    /* Added this to contain the pseudo-element */
+    overflow: hidden;
+    /* Added this to make sure the pseudo-element doesn't overflow */
   }
   
   .grid {
     align-items: center;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+    border-top: .5vmin solid black;
+    border-bottom: .5vmin solid black;
+    border-left: .5vmin solid black;
+    border-right: .5vmin solid black;
     display: flex;
     flex-wrap: wrap;
     height: 100%;
     justify-content: center;
-    height: 40vmin;
-    width: 40vmin;
+    height: 50vmin;
+    width: 50vmin;
+    position: relative;
+    /* Added this to contain the pseudo-element */
+    z-index: 1;
+    /* Added this to make sure the content is above the pseudo-element */
+  }
+  
+  .grid::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("images/plane.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-color: #465ff9;
+    filter: blur(10px);
+    z-index: -1;
+    /* Added this to make sure the pseudo-element is behind the content */
+  }
+  
+  #high-scores-wrapper {
+    display: flex;
+    grid-area: item-2;
+  }
+  
+  #scores {
+    color: white;
   }
   
   .grid div {
-    border: 1px solid lightgrey;
+    border: 1px solid rgba(110, 135, 247, 0.2);
+    border-radius: .2vmin;
     flex-grow: 1;
     height: 10%;
     width: 10%;
   }
   
-  .grid div.cat {
-    background-image: url('../assets/cat.png');
-    background-repeat: no-repeat;
+  .grid div.snake {
+    background-color: red;
     background-size: contain;
+    border-radius: 0.5vmin;
+
+  }
+
+  .grid div.food {
+    background-color: black;
+  }
+  
+  
+  #gameover-screen {
+    background-color: rgba(45, 44, 162, .8);
+    border: 1vmin solid rgba(45, 44, 162, .8);
+    border-radius: 2vmin;
+    padding: 5vmin;
+    margin-top: 15vmin;
+    position: absolute;
+    width: 55vmin;
+    height: 60vmin;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  h1.gameover {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    font-size: 8vmin;
+    margin-top: -1vmin;
+    margin-bottom: 1.5vmin;
+  }
+  
+  div.leaderboard {
+    width: 45vmin;
+    height: 30vmin;
+    background: rgba(122, 168, 249, 0.6);
+    border-radius: 2vmin;
+    box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+    padding: 2vmin;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+  margin-left: -1vmin;
+  }
+  
+  #score,
+  #high-score {
+    font-size: 4vmin;
+  }
+  
+  #score {
+    color: #bfd;
+    font-family: 'Cabin Sketch', cursive;
+    position: absolute;
+    top: 40%;
+    left: 20%;
+    transform: translate(-50%, -100%);
+    font-size: 4vmin;
+  }
+  
+  #high-score {
+    color: #bfd;
+    font-family: 'Cabin Sketch', cursive;
+    position: absolute;
+    top: 40%;
+    left: 70%;
+    transform: translate(-50%, -100%);
+    font-size: 4vmin;
+  }
+  
+  #gameover-score,
+  #gameover-high-score,
+  #gameover-world-record {
+    align-self: flex-start;
+    
+  }
+  
+  
+  #gameover-score {
+    margin-top: 1vmin;
+  }
+  
+  #gameover-high-score,
+  #gameover-world-record {
+   margin-top: 1vmin;
+  }
+  
+  
+  button#restart-button {
+    display: flex;
+    align-self: center;
+    font-size: 4vmin;
+    color: #bfd;
+    font-family: 'Cabin Sketch', cursive;
+    padding: 2vmin 3vmin;
+    background: #3c50df;
+    border: none;
+    border-radius: 2vmin;
     cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 2.5vmin;
+    margin-left: 10vmin;
+  }
+  
+  button#restart-button:hover {
+    background: red;
   }
