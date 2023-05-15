@@ -59,16 +59,12 @@ body.game-running #start-screen {
 }
   
   .grid-wrapper {
-    /* height: 100vh; */
     display: flex;
     justify-content: center;
     align-items: center;
     grid-area: item-1;
-    /* margin-top: -25vmin; */
     position: relative;
-    /* Added this to contain the pseudo-element */
     overflow: hidden;
-    /* Added this to make sure the pseudo-element doesn't overflow */
   }
   
   .grid {
@@ -85,9 +81,7 @@ body.game-running #start-screen {
     height: 50vmin;
     width: 50vmin;
     position: relative;
-    /* Added this to contain the pseudo-element */
     z-index: 1;
-    /* Added this to make sure the content is above the pseudo-element */
   }
   
   .grid::before {
@@ -187,13 +181,8 @@ body.game-running #start-screen {
     justify-content: center;
     align-items: center;
     grid-area: item-1;
-    /* margin-top: -25vmin; */
-    /* position: relative; */
     font-family: 'Cabin Sketch', cursive;
     color: #bfd;
-
-    /* Added this to contain the pseudo-element */
-    /* Added this to make sure the pseudo-element doesn't overflow */
   }
   
   #score {
@@ -206,20 +195,11 @@ body.game-running #start-screen {
   #score-wrapper {
     display: flex;
     justify-content: space-between;
-    width: 60vmin;  /* Same as the grid width */
+    width: 60vmin;  
     margin-top: 7vmin;
-    margin-bottom: 2vmin;/* Space between the score and the grid */
+    margin-bottom: 2vmin;
 }
-    /*
-    color: #bfd;
-    font-family: 'Cabin Sketch', cursive;
-    position: absolute;
-    top: 38%;
-    left: 26%;
-    transform: translate(-50%, -100%);
   
-  }
-  */
   
   #high-score {
   margin-left: 20vmin;

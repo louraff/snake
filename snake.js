@@ -76,7 +76,7 @@ function init() {
     drawSnake()
     intervalId = setInterval(moveSnake, delay) 
     drawFood()
-    resetHighScore()
+    // resetHighScore()
   }
 
   function clearSnake() {
@@ -274,10 +274,10 @@ function checkSelfCollision(head) {
     cells.length = 0;
   }
 
-  function resetHighScore() {
-    highScore = 0;
-    localStorage.setItem('highScore', highScore);
-    highScoreElement.textContent = 'High Score: ' + highScore;
-  }
+  // function resetHighScore() {
+  //   highScore = 0;
+  //   localStorage.setItem('highScore', highScore);
+  //   highScoreElement.textContent = 'High Score: ' + highScore;
+  // }
   
 }
