@@ -128,7 +128,20 @@ body.game-running #start-screen {
   .grid div.food {
     background-color: red;
   }
-  
+
+  .grid div.special-food {
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.pilot-message {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  font-family: 'Cabin Sketch', cursive;
+  color: #bfd;
+  font-size: 3vmin;
+}
   
   #gameover-screen {
     background-color: rgba(45, 44, 162, .8);
@@ -195,17 +208,17 @@ body.game-running #start-screen {
   #score-wrapper {
     display: flex;
     justify-content: space-between;
-    width: 60vmin;  
+    width: 68vmin;  
     margin-top: 7vmin;
     margin-bottom: 2vmin;
 }
   
   
   #high-score {
-  margin-left: 20vmin;
+   margin-left: 22vmin;
    margin-bottom: -1vmin;
    padding-bottom: 0vmin;
-   margin-right: 3vmin;
+   margin-right: 6vmin;
   
   } 
   

@@ -11,26 +11,29 @@ function init() {
 
   const scoreElement = document.getElementById('score');
   const highScoreElement = document.getElementById('high-score');
+  const pilotMessage = document.querySelector('.pilot-message')
   
 
   const hiss = new Audio('sounds/hiss.mp3');
   const takeoff = new Audio('sounds/takeoff.mp3');
   const background = new Audio('sounds/background.mp3');
   const announcement = new Audio('sounds/announcement.mp3');
+  const notification = new Audio('sounds/notification.wav');
 
   const worldRecord = '99,999'
   let highScore = localStorage.getItem('highScore') || 0
 
-  let delay = 400;
-  let intervalId;
+  let delay = 400
   let score = 0000
+  let intervalId
+  let specialFoodTimeout
 
  
   let direction = { x: 1, y: 0 }
   let snake = [
-    { x: Math.floor(width / 2), y: Math.floor(height / 2) + 1 }, 
-    { x: Math.floor(width / 2), y: Math.floor(height / 2) },
-    { x: Math.floor(width / 2), y: Math.floor(height / 2) - 1 }
+    { x: Math.floor(width / 2), y: Math.floor(height / 2)}, 
+    { x: Math.floor(width / 2) -1, y: Math.floor(height / 2)},
+    { x: Math.floor(width / 2) -2, y: Math.floor(height / 2)}
   ]
 
   document.addEventListener("keydown", handleUserInput)
@@ -76,7 +79,8 @@ function init() {
     drawSnake()
     intervalId = setInterval(moveSnake, delay) 
     drawFood()
-    // resetHighScore()
+    setTimeout(handleSpecialFood, 20000)
+    resetHighScore()
   }
 
   function clearSnake() {
@@ -115,26 +119,37 @@ function init() {
 
     snake.unshift(newHead)
   
-    // Check if the next cell contains food
     if (cells[newHead.y * width + newHead.x].classList.contains('food')) {
-      // Remove the food
+ 
       cells[newHead.y * width + newHead.x].classList.remove('food');
       drawFood()
       announcement.play() 
 
       updateScore()
-  
+      if (delay > 20) { 
+        delay *= 0.95;
+        console.log("New delay: " + delay); 
+        clearInterval(intervalId);
+        intervalId = setInterval(moveSnake, delay);
+      }
+    } else if (cells[newHead.y * width + newHead.x].classList.contains('special-food')) {
+      notification.play()
+      clearSpecialFood()
+
+      score += 10
+
+      updateScore()
       if (delay > 20) {  // Only speed up if the delay is over the minimum
         delay *= 0.95;
         console.log("New delay: " + delay); 
         clearInterval(intervalId);
         intervalId = setInterval(moveSnake, delay);
       }
+
+
     } else {
-      
       snake.pop()
     }
-  
     drawSnake()
   }
 
@@ -144,25 +159,22 @@ function init() {
     hiss.volume = 0.4;
     console.log('game over function called');
     clearInterval(intervalId);
-
-   
-  grid.style.display = 'none';
-
+    clearTimeout(specialFoodTimeout)
+    
+    grid.style.display = 'none';
     scoreElement.style.display = 'none';
     highScoreElement.style.display = 'none';
+    pilotMessage.style.display = 'none';
 
-    scoreElement.textContent = score;
-    highScoreElement.textContent = 'High Score: ' + highScore;
 
-     // Show the game over screen
+
   const gameOverScreen = document.getElementById('gameover-screen');
   gameOverScreen.style.display = 'block';
   console.log('gameOverScreen display is now ' + gameOverScreen.style.display);
 
-  // Update the scores on the game over screen
+
   document.getElementById('gameover-score').textContent = 'Score: ' + score;
   document.getElementById('gameover-high-score').textContent = 'High Score: ' + highScore;
-
   document.getElementById('gameover-world-record').textContent = 'World Record: ' + worldRecord;
   }
 
@@ -172,13 +184,14 @@ function restartGame() {
 
     const grid = document.querySelector('.grid')
     grid.style.display = 'flex';
-      // Hide the game over screen
+
   const gameOverScreen = document.getElementById('gameover-screen');
   gameOverScreen.style.display = 'none';
+  pilotMessage.style.display = 'none';
+
   console.log('gameOverScreen display is now ' + gameOverScreen.style.display);
 
 
-  // Reset game variables
   score = 0;
   direction = { x: 1, y: 0 };
   snake = [
@@ -192,9 +205,9 @@ function restartGame() {
   scoreElement.style.display = 'flex';
   highScoreElement.style.display = 'flex';
 
-  // Redraw the grid and start the game again
   clearGrid()
-  createGrid();
+  createGrid()
+  clearTimeout(specialFoodTimeout)
   background.play()
   background.loop = true;
 }
@@ -210,9 +223,37 @@ function restartGame() {
     return index;
 }
 
-function drawFood() {
-    const foodIndex = randomFood();  
-    cells[foodIndex].classList.add('food'); 
+function drawFood() {  
+  const foodIndex = randomFood();
+  cells[foodIndex].classList.add('food'); 
+}
+
+function drawSpecialFood() {
+  const foodIndex = randomFood();
+  const foodImage = 'images/pilot1.jpeg'
+  const cell = cells[foodIndex]
+  cell.classList.add('special-food')
+  cell.style.backgroundImage = `url(${foodImage})`
+  pilotMessage.style.display = 'flex'
+}
+
+const clearSpecialFood = () => {
+  pilotMessage.style.display = 'none';
+  for(let cell of cells) {
+      if(cell.classList.contains('special-food')) {
+          cell.classList.remove('special-food');
+          cell.style.backgroundImage = '';
+      }
+  }
+}
+
+const handleSpecialFood = () => {
+  clearTimeout(specialFoodTimeout)
+  drawSpecialFood()
+  specialFoodTimeout = setTimeout(clearSpecialFood, 20000)
+  const nextAppearanceTime = Math.floor(Math.random() * 10000 + 20000)
+  specialFoodTimeout = setTimeout(handleSpecialFood, nextAppearanceTime)
+  
 }
 
 function checkSelfCollision(head) {
@@ -274,10 +315,10 @@ function checkSelfCollision(head) {
     cells.length = 0;
   }
 
-  // function resetHighScore() {
-  //   highScore = 0;
-  //   localStorage.setItem('highScore', highScore);
-  //   highScoreElement.textContent = 'High Score: ' + highScore;
-  // }
+  function resetHighScore() {
+    highScore = 0;
+    localStorage.setItem('highScore', highScore);
+    highScoreElement.textContent = 'High Score: ' + highScore;
+  }
   
 }
