@@ -25,8 +25,9 @@ function init() {
 
   let delay = 400
   let score = 0000
-  let intervalId
+  let interval
   let specialFoodTimeout
+  let isSpecialFoodActive = false
 
  
   let direction = { x: 1, y: 0 }
@@ -50,7 +51,7 @@ function init() {
         announcement.play();
 
         let containers = document.querySelectorAll('.container')
-        // Show the game containers
+     
         containers.forEach(container => {
             container.classList.remove('hide');
         });
@@ -77,10 +78,10 @@ function init() {
     scoreElement.textContent = score;
     highScoreElement.textContent = 'High Score: ' + highScore;
     drawSnake()
-    intervalId = setInterval(moveSnake, delay) 
+    interval = setInterval(moveSnake, delay) 
     drawFood()
     setTimeout(handleSpecialFood, 20000)
-    resetHighScore()
+    // resetHighScore()
   }
 
   function clearSnake() {
@@ -115,7 +116,6 @@ function init() {
     ) {
       return gameOver()
     }
-  
 
     snake.unshift(newHead)
   
@@ -124,13 +124,13 @@ function init() {
       cells[newHead.y * width + newHead.x].classList.remove('food');
       drawFood()
       announcement.play() 
-
       updateScore()
+      
       if (delay > 20) { 
         delay *= 0.95;
         console.log("New delay: " + delay); 
-        clearInterval(intervalId);
-        intervalId = setInterval(moveSnake, delay);
+        clearInterval(interval);
+        interval = setInterval(moveSnake, delay);
       }
     } else if (cells[newHead.y * width + newHead.x].classList.contains('special-food')) {
       notification.play()
@@ -139,13 +139,12 @@ function init() {
       score += 10
 
       updateScore()
-      if (delay > 20) {  // Only speed up if the delay is over the minimum
+      if (delay > 20) {  
         delay *= 0.95;
         console.log("New delay: " + delay); 
-        clearInterval(intervalId);
-        intervalId = setInterval(moveSnake, delay);
+        clearInterval(interval);
+        interval = setInterval(moveSnake, delay);
       }
-
 
     } else {
       snake.pop()
@@ -158,7 +157,7 @@ function init() {
     hiss.play(); 
     hiss.volume = 0.4;
     console.log('game over function called');
-    clearInterval(intervalId);
+    clearInterval(interval);
     clearTimeout(specialFoodTimeout)
     
     grid.style.display = 'none';
@@ -245,11 +244,13 @@ const clearSpecialFood = () => {
           cell.style.backgroundImage = '';
       }
   }
+  isSpecialFoodActive = false;
 }
 
 const handleSpecialFood = () => {
   clearTimeout(specialFoodTimeout)
   drawSpecialFood()
+  isSpecialFoodActive = true;
   specialFoodTimeout = setTimeout(clearSpecialFood, 20000)
   const nextAppearanceTime = Math.floor(Math.random() * 10000 + 20000)
   specialFoodTimeout = setTimeout(handleSpecialFood, nextAppearanceTime)
@@ -315,10 +316,10 @@ function checkSelfCollision(head) {
     cells.length = 0;
   }
 
-  function resetHighScore() {
-    highScore = 0;
-    localStorage.setItem('highScore', highScore);
-    highScoreElement.textContent = 'High Score: ' + highScore;
-  }
+  // function resetHighScore() {
+  //   highScore = 0;
+  //   localStorage.setItem('highScore', highScore);
+  //   highScoreElement.textContent = 'High Score: ' + highScore;
+  // }
   
 }
