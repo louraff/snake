@@ -199,7 +199,7 @@ body.game-running #start-screen {
   }
   
   #score {
-  margin-left: 8vmin;
+  margin-left: 9vmin;
    margin-top: 0vmin; 
    margin-bottom: -1vmin;
    padding-bottom: 0vmin;
@@ -215,7 +215,7 @@ body.game-running #start-screen {
   
   
   #high-score {
-   margin-left: 22vmin;
+   margin-left: 20vmin;
    margin-bottom: -1vmin;
    padding-bottom: 0vmin;
    margin-right: 6vmin;
