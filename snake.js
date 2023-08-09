@@ -23,7 +23,7 @@ function init() {
   const worldRecord = '99,999'
   let highScore = localStorage.getItem('highScore') || 0
 
-  let delay = 400
+  let delay = 2m 00
   let score = 0000
   let interval
   let specialFoodTimeout
@@ -125,7 +125,7 @@ function init() {
       drawFood()
       announcement.play() 
       updateScore()
-      
+
       if (delay > 20) { 
         delay *= 0.95;
         console.log("New delay: " + delay); 
@@ -207,7 +207,7 @@ function restartGame() {
   clearGrid()
   createGrid()
   clearTimeout(specialFoodTimeout)
-  background.play()
+  background.play() 
   background.loop = true;
 }
 
@@ -251,7 +251,7 @@ const handleSpecialFood = () => {
   clearTimeout(specialFoodTimeout)
   drawSpecialFood()
   isSpecialFoodActive = true;
-  specialFoodTimeout = setTimeout(clearSpecialFood, 20000)
+  specialFoodTimeout = setTimeout(clearSpecialFood, 15000)
   const nextAppearanceTime = Math.floor(Math.random() * 10000 + 20000)
   specialFoodTimeout = setTimeout(handleSpecialFood, nextAppearanceTime)
   
@@ -313,7 +313,7 @@ function checkSelfCollision(head) {
       const cell = cells[i];
       cell.parentNode.removeChild(cell);
     }
-    cells.length = 0;
+    cells.length = 0; 
   }
 
   // function resetHighScore() {
